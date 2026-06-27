@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cotizador</title>
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Cotizador" />
+    <link rel="manifest" href="/manifest.json" />
+</head>
+<body>
+
+    <div class="app-layout" data-jscontroller="LayoutUI">
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>My Business</h2>
+                <button class="btn-icon mobile-only" data-jsclick="@toggleSidebar">&times;</button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#quotations" class="active">Quotations</a>
+                <a href="#clients">Clients</a>
+                <a href="#providers">Providers</a>
+                <a href="#products">Products</a>
+                <a href="#products/categories">Product Categories</a>
+                <a href="#products/inventory">Inventory</a>
+                <a href="#services">Services</a>
+                <a href="#services/categories">Service Categories</a>
+                <a href="#business">Business Profile</a>
+                <a href="#config">Settings</a>
+            </nav>
+        </aside>
+
+        <div class="main-wrapper">
+            <header class="app-header">
+                <button class="btn-icon mobile-only" data-jsclick="@toggleSidebar">☰</button>
+                <h1 id="view_title">Quotations</h1>
+            </header>
+            
+            <main id="main-content" class="container">
+                </main>
+        </div>
+    </div>
+
+    <dialog id="stepper_dialog" class="modal modal-lg scrollable" data-jscontroller="QuotationStepper">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Quotation</h2>
+                <button data-jsclick="@closeDialog" class="btn-icon">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                
+                <div class="stepper-indicator">
+                    <div class="step active" id="indicator_step_1">1. Client</div>
+                    <div class="step" id="indicator_step_2">2. Articles</div>
+                    <div class="step" id="indicator_step_3">3. Finalize</div>
+                </div>
+
+                <div id="step_1_content" class="step-content active">
+                    <div class="form-group">
+                        <label>Search Client</label>
+                        <input type="text" class="form-control" placeholder="Type name or company..." data-jsinput="@searchClient">
+                    </div>
+                    <ul class="item-list" id="client_search_results">
+                        <li class="empty-state">No clients found.</li>
+                    </ul>
+                    <button class="btn btn-text" data-jsclick="@createNewClient">+ Create New Client</button>
+                </div>
+
+                <div id="step_2_content" class="step-content">
+                    <div class="filters">
+                        <input type="text" class="form-control flex-grow" placeholder="Search..." data-jsinput="@filterArticles">
+                        <select class="form-control" data-jschange="@filterArticles">
+                            <option value="all">All</option>
+                            <option value="products">Products</option>
+                            <option value="services">Services</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group" id="articles_list">
+                        </div>
+                </div>
+
+                <div id="step_3_content" class="step-content">
+                    <h3>Quotation Summary</h3>
+                    <ul class="item-list" id="quotation_summary_list"></ul>
+                    <h3 class="total-display">Total: <span id="quotation_total">0.00</span></h3>
+                    
+                    <div class="action-grid">
+                        <button class="btn btn-outline" data-jsclick="@saveQuotation">Save Draft</button>
+                        <button class="btn btn-primary" data-jsclick="@sendEmail">Send Email</button>
+                        <button class="btn btn-success" data-jsclick="@saveAndExport">Save & Export PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-between">
+                <button class="modal-button btn btn-text" id="stepper_prev" data-jsclick="@prevStep" style="display: none;">Back</button>
+                <div class="flex-spacer"></div>
+                <button class="modal-button btn btn-primary" id="stepper_next" data-jsclick="@nextStep" disabled>Next Step</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="js/base.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script type="text/javascript">
+        configModulePaths({
+            baseUrl: "/js",
+            paths: { 'AppModules': '/js/app.js' }
+        });
+
+        requireModule("ResourceLoader")
+            .register(
+                { type: "stylesheet", src: "css/styles.css", preload: true },
+                { type: "script", src: "js/jspdf.js", async: true }
+            )
+            .onReady(async function () {
+                requireModule("JSEventDispatcher").init();
+                
+                // 1. Initialize DB
+                await requireModule("DatabaseService").init();
+                
+                // 2. Run Seeder (Will only inject if empty)
+                await requireModule("DataSeeder").runSeed();
+                
+                // 3. Start Router (Now the guard will pass!)
+                requireModule("Router").init(); 
+            })
+            .start();
+    </script>
+</body>
+</html>
