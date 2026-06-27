@@ -954,8 +954,18 @@ defineModule("PDFService", ["FormatHelper"], function(global, requireModule, req
         }
 
         // --- Filename ---
-        var safeClientName = safeText(data.client.name).replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+        // 1. Normalize removes accents (ú -> u, ñ -> n)
+        var normalizedName = safeText(data.client.name).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        // 2. Replace any remaining spaces or weird symbols with underscores, and make lowercase
+        var safeClientName = normalizedName.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+        
+        // 3. Clean up multiple underscores in a row (e.g., "publico__en_general" -> "publico_en_general")
+        safeClientName = safeClientName.replace(/_+/g, '_');
+        
+        // 4. Generate final filename
         var fileName = "cotizacion_" + safeClientName + "_" + new Date().toISOString().split('T')[0] + ".pdf";
+        
         doc.save(fileName);
     }
 
