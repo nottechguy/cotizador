@@ -86,13 +86,14 @@ defineModule("DataSeeder", ["DatabaseService"], function(global, requireModule, 
             logo: defaultLogoBase64
         },
         products: [
-            // --- Software & Licenses ---
             { title: "Licencia Sistema POS (Paquete Base)", price: 14000, category: "Software", description: "Sistema de Punto de Venta (Inventario, Proveedores, 5 perfiles). Modo offline con sincronización en la nube y respaldos diarios. Incluye instalación (3 PCs), lector de barras e impresora. 6 meses de soporte." },
             { title: "Módulo POS Móvil (Add-on)", price: 3500, category: "Software", description: "Aplicación móvil complementaria para gestión de inventario y ventas en piso, sincronizada en tiempo real." },
             { title: "Software de Gestión Hotelera (Suite)", price: 35000, category: "Software", description: "Panel administrativo completo (habitaciones, tarifas, reservas), landing page y notificaciones en tiempo real." },
-            { title: "Suscripción Menú Digital QR (Anual)", price: 1800, category: "Software", description: "Plataforma de menú autoadministrable con código QR." },
             
-            // --- Hosting Services (Hostinger Based + Management Markup) ---
+            // --- Digital Menus (Recurring Product) ---
+            { title: "Suscripción Menú Digital QR (Anual)", price: 1800, category: "Software", description: "Plataforma en la nube para menú autoadministrable. Generación de código QR y alojamiento web garantizado por 12 meses." },
+
+            // --- Hosting Services ---
             { title: "Hosting Premium + Dominio (1 Año)", price: 1500, category: "Infraestructura", description: "100GB SSD, ancho de banda ilimitado, SSL gratuito, cuentas de correo y dominio .com/.mx. Ideal para Landing Pages." },
             { title: "Hosting Empresarial NVMe (1 Año)", price: 2500, category: "Infraestructura", description: "200GB NVMe, rendimiento x5, respaldos diarios automáticos y CDN. Excelente para aplicaciones web y tiendas." },
             { title: "Cloud Hosting Dedicado (1 Año)", price: 4800, category: "Infraestructura", description: "Recursos dedicados (IP dedicada, 3GB RAM, 2 Cores). Optimizado para aplicaciones Laravel/MySQL de alto tráfico." },
@@ -100,15 +101,109 @@ defineModule("DataSeeder", ["DatabaseService"], function(global, requireModule, 
         ],
         services: [
             // --- Web Development ---
-            { title: "Desarrollo Landing Page (Básico)", price: 3500, category: "Desarrollo Web", description: "Diseño responsivo de una sección, formulario de contacto y botón flotante de WhatsApp. Alta velocidad de carga." },
+            { title: "Desarrollo Landing Page (Básico)", price: 3000, category: "Desarrollo Web", description: "Diseño responsivo de 1 sección fluida, formulario de contacto y botón flotante de WhatsApp. Alta velocidad de carga." },
             { title: "Desarrollo Landing Page (Starter)", price: 6000, category: "Desarrollo Web", description: "Diseño a medida de hasta 3 secciones (Inicio, Servicios, Contacto). SEO on-page y métricas de Google Analytics." },
-            { title: "Desarrollo Landing Page (Corporativo)", price: 10000, category: "Desarrollo Web", description: "Diseño de interfaz exclusivo, animaciones, integración con APIs externas (CRM/Mailchimp) y optimización de conversión." },
+            { title: "Desarrollo Landing Page (Corporativo)", price: 8000, category: "Desarrollo Web", description: "Diseño de interfaz exclusivo, animaciones, integración con APIs externas (CRM/Mailchimp) y optimización de conversión." },
             { title: "Desarrollo de Aplicación Web a Medida", price: 35000, category: "Desarrollo Web", description: "Desarrollo de software personalizado con panel administrativo, roles de usuario, y base de datos relacional." },
             
-            // --- Marketing & Ads ---
-            { title: "Gestión de Facebook Ads (Semanal)", price: 2500, category: "Marketing", description: "Mantenimiento mensual. Incluye diseño de 3 posts y 2 reels a la semana. (Pauta no incluida)." },
-            { title: "Gestión de Facebook Ads (Quincenal)", price: 4500, category: "Marketing", description: "Estrategia de crecimiento mensual. 6 posts y 4 reels por quincena. Coordinación visual y reporte de rendimiento. (Pauta no incluida)." },
-            { title: "Gestión de Facebook Ads (Mensual)", price: 8000, category: "Marketing", description: "Campaña agresiva mensual. 9 posts y 6 reels al mes. Dirección creativa, pruebas A/B de anuncios. (Pauta no incluida)." }
+            // --- Digital Menus (Setup Service) ---
+            // --- Digital Menus (Setup Services by Size) ---
+            { 
+                title: "Diseño de Menú Digital (Básico - Hasta 40 ítems)", 
+                price: 1500, 
+                category: "Desarrollo Web", 
+                description: "Captura y digitalización para cafeterías, bares o food trucks. Hasta 40 platillos/bebidas. Incluye personalización de colores corporativos y logotipo." 
+            },
+            { 
+                title: "Diseño de Menú Digital (Estándar - Hasta 100 ítems)", 
+                price: 2500, 
+                category: "Desarrollo Web", 
+                description: "Captura y digitalización de menú físico (hasta 100 platillos). Diseño de interfaz web adaptada a la identidad del restaurante, con categorización ordenada (Entradas, Platos Fuertes, etc.)." 
+            },
+            { 
+                title: "Diseño de Menú Digital (Extendido - Hasta 250 ítems)", 
+                price: 4500, 
+                category: "Desarrollo Web", 
+                description: "Digitalización de menú amplio. Hasta 250 platillos. Incluye categorización avanzada, integración de fotografías provistas por el cliente y sección de modificadores (ej. términos de carne, extras)." 
+            },
+            { 
+                title: "Diseño de Menú Digital Bilingüe (Turístico)", 
+                price: 6500, 
+                category: "Desarrollo Web", 
+                description: "Digitalización de menú (hasta 150 platillos) con traducción profesional al Inglés. Interfaz con selector de idioma (Español/Inglés). Altamente recomendado para restaurantes en zonas turísticas." 
+            },
+
+            // --- Retail & Convenience Stores (Catálogos e Inventarios) ---
+            { 
+                title: "Catálogo Digital de Productos (Básico - Hasta 100 SKUs)", 
+                price: 2000, 
+                category: "Desarrollo Web", 
+                description: "Creación de catálogo digital ideal para boutiques, zapaterías o negocios de especialidad. Incluye alta de fotografías, precios, y enlace directo para concretar pedidos por WhatsApp." 
+            },
+            { 
+                title: "Catálogo Digital de Delivery (Tiendas - Hasta 500 SKUs)", 
+                price: 5500, 
+                category: "Desarrollo Web", 
+                description: "Catálogo en línea estructurado por pasillos o departamentos (Abarrotes, Bebidas, Cuidado Personal). El cliente puede armar un carrito de compras y enviarlo por WhatsApp para servicio a domicilio." 
+            },
+            { 
+                title: "Servicio de Captura de Inventario Inicial (Hasta 1,000 Códigos)", 
+                price: 3500, 
+                category: "Software", 
+                description: "Registro físico, escaneo de códigos de barras y alta manual en la base de datos del Punto de Venta. Entregamos el sistema con tu inventario base listo para que empieces a cobrar inmediatamente." 
+            },
+            { 
+                title: "Servicio de Captura de Inventario Masivo (Hasta 3,000 Códigos)", 
+                price: 8000, 
+                category: "Software", 
+                description: "Levantamiento de inventario a gran escala para mini-supers, ferreterías o refaccionarias. Incluye clasificación por departamentos, captura de costo/precio, y configuración de alertas de stock mínimo." 
+            },
+
+            // --- Community Management (Tráfico Orgánico y Marca) ---
+            { 
+                title: "Community Management (Básico)", 
+                price: 2500, 
+                category: "Marketing", 
+                description: "Mantenimiento de presencia orgánica. 2 publicaciones estáticas semanales, diseño de feed y respuesta a mensajes en horario laboral. Ideal para que tu negocio sirva como un excelente escaparate digital." 
+            },
+            { 
+                title: "Community Management (Estándar)", 
+                price: 4000, 
+                category: "Marketing", 
+                description: "Gestión orgánica activa. 3 publicaciones semanales (incluye 1 reel), gestión de historias, moderación de comentarios y creación de calendario de contenidos mensual. Ideal para conectar con tu audiencia." 
+            },
+            { 
+                title: "Community Management (Avanzado)", 
+                price: 6500, 
+                category: "Marketing", 
+                description: "Estrategia agresiva de crecimiento orgánico. 4 publicaciones semanales (incluye 2 reels), historias interactivas, moderación continua y reporte mensual de alcance e interacción." 
+            },
+            { 
+                title: "Community Management Bilingüe (Turístico)", 
+                price: 9500, 
+                category: "Marketing", 
+                description: "Gestión VIP orgánica (Español/Inglés) para sector hospitalidad. Gestión de reputación (TripAdvisor/Google), creación de contenido bilingüe y atención a mensajes 7 días a la semana." 
+            },
+
+            // --- Facebook & Instagram Ads (Tráfico Pagado y Ventas) ---
+            { 
+                title: "Gestión de Facebook Ads (Campaña Básica)", 
+                price: 2500, 
+                category: "Marketing", 
+                description: "Creación y gestión de 1 campaña mensual (ej. Mensajes de WhatsApp o Tráfico). Incluye el diseño de 2 creativos publicitarios (imágenes/video), segmentación de público local y monitoreo. (Pauta no incluida)." 
+            },
+            { 
+                title: "Gestión de Facebook Ads (Generación de Leads)", 
+                price: 4500, 
+                category: "Marketing", 
+                description: "Estrategia para captación de clientes. Gestión de hasta 3 campañas simultáneas. Incluye diseño de 4 creativos para pruebas A/B, segmentación avanzada y optimización de presupuesto. (Pauta no incluida)." 
+            },
+            { 
+                title: "Gestión de Facebook Ads (Conversión Pro)", 
+                price: 8000, 
+                category: "Marketing", 
+                description: "Gestión integral de pauta publicitaria. Campañas ilimitadas (Retargeting, Ventas, Leads). Creación de creativos dinámicos, instalación de Pixel Meta, escalado de presupuesto y reporte de ROI. (Pauta no incluida)." 
+            }
         ]
     };
 
@@ -397,11 +492,46 @@ defineModule("QuotationStepper", ["$", "CSSCore", "DatabaseService", "FormatHelp
             </li>`;
         }
 
-        selectedArticles.forEach(function(item) {
-            list.innerHTML += `<li class="flex-between"><span>${item.title}</span> <span>${FormatHelper.formatCurrency(item.price)}</span></li>`;
+        // 1. Render items with <input type="number"> instead of static text
+        selectedArticles.forEach(function(item, index) {
+            list.innerHTML += `
+                <li class="flex-between align-center" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border, #ccc);">
+                    <span style="flex: 1; padding-right: 10px;">${item.title}</span> 
+                    <div class="flex align-center">
+                        <span style="margin-right: 4px; font-weight: bold; color: #666;">$</span>
+                        <input type="number" 
+                               class="app-input price-override" 
+                               data-index="${index}" 
+                               value="${item.price}" 
+                               step="0.01" 
+                               min="0" 
+                               style="width: 100px; text-align: right; padding: 4px; font-weight: bold; color: var(--primary);">
+                    </div>
+                </li>`;
             total += item.price;
         });
+        
         totalEl.innerText = FormatHelper.formatCurrency(total);
+
+        // 2. Attach real-time listeners to calculate discounts on the fly
+        var inputs = list.querySelectorAll('.price-override');
+        inputs.forEach(function(input) {
+            input.addEventListener('input', function(e) {
+                // Find which item was edited using the data-index
+                var idx = parseInt(e.target.getAttribute('data-index'));
+                
+                // Parse the new price, fallback to 0 if the user clears the input
+                var newPrice = parseFloat(e.target.value) || 0; 
+                
+                // Update the state array
+                selectedArticles[idx].price = newPrice;
+                
+                // Recalculate the visual total instantly
+                var newTotal = 0;
+                selectedArticles.forEach(function(art) { newTotal += art.price; });
+                totalEl.innerText = FormatHelper.formatCurrency(newTotal);
+            });
+        });
     }
 
     async function openDialog() {
