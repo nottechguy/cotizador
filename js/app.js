@@ -452,6 +452,7 @@ defineModule("QuotationStepper", ["$", "CSSCore", "DatabaseService", "FormatHelp
     var allArticles = []; // Combined products and services
     var selectedClient = null;
     var selectedArticles = [];
+    var isTaxInclusive = false;
 
     var defaultClient = { 
         name: "Público en General", 
@@ -503,16 +504,15 @@ defineModule("QuotationStepper", ["$", "CSSCore", "DatabaseService", "FormatHelp
         var list = $.fromIDOrElement("quotation_summary_list");
         var totalEl = $.fromIDOrElement("quotation_total");
         list.innerHTML = "";
-        var total = 0;
 
         if (selectedClient) {
-            list.innerHTML += `<li style="background: #f8fafc; border-bottom: 2px solid var(--border);">
-                <strong style="color: var(--primary)">Client: ${selectedClient.name}</strong><br>
+            list.innerHTML += `<li style="background: #f8fafc; border-bottom: 2px solid var(--border); padding: 10px; margin-bottom: 10px;">
+                <strong style="color: var(--primary)">Cliente: ${selectedClient.name}</strong><br>
                 <small>RFC: ${selectedClient.rfc || 'N/A'}</small>
             </li>`;
         }
 
-        // 1. Render items with <input type="number"> instead of static text
+        // 1. Renderizar los artículos interactivos
         selectedArticles.forEach(function(item, index) {
             list.innerHTML += `
                 <li class="flex-between align-center" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border, #ccc);">
@@ -528,30 +528,65 @@ defineModule("QuotationStepper", ["$", "CSSCore", "DatabaseService", "FormatHelp
                                style="width: 100px; text-align: right; padding: 4px; font-weight: bold; color: var(--primary);">
                     </div>
                 </li>`;
-            total += item.price;
         });
         
-        totalEl.innerText = FormatHelper.formatCurrency(total);
+        // 2. Agregar el Interruptor de IVA y el desglose al final de la lista
+        list.innerHTML += `
+            <li style="margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start;">
+                <label style="font-weight: bold; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                    <input type="checkbox" id="taxToggle" ${isTaxInclusive ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer;">
+                    Precios ya incluyen IVA
+                </label>
+                <div style="text-align: right; font-size: 13px; color: #555;">
+                    Subtotal: <strong id="summarySubtotalVal"></strong><br>
+                    IVA (16%): <strong id="summaryIvaVal"></strong>
+                </div>
+            </li>
+        `;
 
-        // 2. Attach real-time listeners to calculate discounts on the fly
+        // 3. Función maestra de cálculo
+        function calculateAndDisplayTotals() {
+            var sum = 0;
+            selectedArticles.forEach(function(art) { sum += art.price; });
+            
+            var baseSubtotal, iva, grandTotal;
+            
+            if (isTaxInclusive) {
+                // Lógica B2C: La suma es el Gran Total, el subtotal se extrae hacia atrás
+                grandTotal = sum;
+                baseSubtotal = sum / 1.16;
+                iva = sum - baseSubtotal;
+            } else {
+                // Lógica B2B: La suma es el Subtotal, el IVA se cobra aparte
+                baseSubtotal = sum;
+                iva = sum * 0.16;
+                grandTotal = sum + iva;
+            }
+
+            // Actualizar textos en la UI
+            document.getElementById('summarySubtotalVal').innerText = FormatHelper.formatCurrency(baseSubtotal);
+            document.getElementById('summaryIvaVal').innerText = FormatHelper.formatCurrency(iva);
+            totalEl.innerText = FormatHelper.formatCurrency(grandTotal);
+        }
+
+        // 4. Attach Listeners a los inputs de precio
         var inputs = list.querySelectorAll('.price-override');
         inputs.forEach(function(input) {
             input.addEventListener('input', function(e) {
-                // Find which item was edited using the data-index
                 var idx = parseInt(e.target.getAttribute('data-index'));
-                
-                // Parse the new price, fallback to 0 if the user clears the input
-                var newPrice = parseFloat(e.target.value) || 0; 
-                
-                // Update the state array
-                selectedArticles[idx].price = newPrice;
-                
-                // Recalculate the visual total instantly
-                var newTotal = 0;
-                selectedArticles.forEach(function(art) { newTotal += art.price; });
-                totalEl.innerText = FormatHelper.formatCurrency(newTotal);
+                selectedArticles[idx].price = parseFloat(e.target.value) || 0; 
+                calculateAndDisplayTotals();
             });
         });
+
+        // 5. Attach Listener al Interruptor de IVA
+        document.getElementById('taxToggle').addEventListener('change', function(e) {
+            isTaxInclusive = e.target.checked;
+            calculateAndDisplayTotals();
+        });
+
+        // Calcular la primera vez que se abre la pantalla
+        calculateAndDisplayTotals();
     }
 
     async function openDialog() {
@@ -819,6 +854,7 @@ defineModule("QuotationStepper", ["$", "CSSCore", "DatabaseService", "FormatHelp
             }),
             total: computedTotal,
             date: dbPayload.date,
+            isTaxInclusive: isTaxInclusive,
             hasPautaNote: requiresPautaNote,
             hasHostingNote: requiresHostingNote,
             hasSoftwareNote: requiresSoftwareNote
@@ -1021,8 +1057,19 @@ defineModule("PDFService", ["FormatHelper"], function(global, requireModule, req
         doc.line(120, y, 195, y);
         y += 8;
 
-        var subtotal = data.total / 1.16;
-        var iva = data.total - subtotal;
+        // --- CÁLCULO DINÁMICO DE IVA ---
+        var sumItems = data.total; // La suma cruda de todos los artículos de la tabla
+        var subtotal, iva, grandTotal;
+
+        if (data.isTaxInclusive) {
+            grandTotal = sumItems;
+            subtotal = sumItems / 1.16;
+            iva = sumItems - subtotal;
+        } else {
+            subtotal = sumItems;
+            iva = sumItems * 0.16;
+            grandTotal = sumItems + iva;
+        }
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
@@ -1039,13 +1086,13 @@ defineModule("PDFService", ["FormatHelper"], function(global, requireModule, req
         doc.setFontSize(12);
         doc.setTextColor(primaryBlue[0], primaryBlue[1], primaryBlue[2]);
         doc.text("Total:", 160, y, { align: 'right' });
-        doc.text(FormatHelper.formatCurrency(data.total), 195, y, { align: 'right' });
+        doc.text(FormatHelper.formatCurrency(grandTotal), 195, y, { align: 'right' });
         
         y += 8;
         doc.setFontSize(9);
         doc.setFont("helvetica", "italic");
         doc.setTextColor(textGray[0], textGray[1], textGray[2]);
-        doc.text(safeText(FormatHelper.numberToWords(data.total)), 195, y, { align: 'right' });
+        doc.text(safeText(FormatHelper.numberToWords(grandTotal)), 195, y, { align: 'right' });
 
         // --- 6. Dynamic Professional Disclaimers System ---
         
