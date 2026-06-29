@@ -67,6 +67,39 @@ textarea {font-family: system-ui, sans-serif;}
     height: 24px;
 }
 
+.nav-item__icon--leading {
+    margin-right: 8px;
+}
+
+.has-submenu .nav-item__icon--trailing {
+    margin-left: auto;
+}
+
+.chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+    border: solid var(--text-muted);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-45deg);
+}
+
+.nav-group.is-open .chevron {
+    transform: rotate(45deg);
+}
+
+.nav-group .submenu {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.03);
+    flex-direction: column;
+}
+
+.nav-group.is-open .submenu {
+    display: flex;
+}
+
 .sidebar-nav a {
     display: block;
     padding: 0.75rem 1.5rem;
