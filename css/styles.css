@@ -77,11 +77,11 @@ textarea {font-family: system-ui, sans-serif;}
     right: 0;
     height: 52px;
     background: var(--surface);
-    padding: 0 12px;
+    padding: 0 12px 0 4px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 8px;
 }
 
 .app-header h1 {
