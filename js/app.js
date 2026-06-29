@@ -80,7 +80,7 @@ defineModule("DataSeeder", ["DatabaseService"], function(global, requireModule, 
             id: 1,
             name: "Luis Antonio Mendoza Hernández",
             rfc: "MEHL961218KL6",
-            address: "Calle Altamirano. #100, Col. Centro, Petatlán, Guerrero",
+            address: "Calle Altamirano. SN, Col. Centro, Petatlán, Guerrero",
             phone: "758 108 5011",
             email: "la.mendoza.1618@gmail.com",
             logo: defaultLogoBase64
@@ -108,7 +108,7 @@ defineModule("DataSeeder", ["DatabaseService"], function(global, requireModule, 
             
             // --- Digital Menus (Setup Service) ---
             // --- Digital Menus (Setup Services by Size) ---
-            { 
+            {
                 title: "Diseño de Menú Digital (Básico - Hasta 40 ítems)", 
                 price: 1500, 
                 category: "Desarrollo Web", 
@@ -198,7 +198,7 @@ defineModule("DataSeeder", ["DatabaseService"], function(global, requireModule, 
                 category: "Marketing", 
                 description: "Estrategia para captación de clientes. Gestión de hasta 3 campañas simultáneas. Incluye diseño de 4 creativos para pruebas A/B, segmentación avanzada y optimización de presupuesto. (Pauta no incluida)." 
             },
-            { 
+            {
                 title: "Gestión de Facebook Ads (Conversión Pro)", 
                 price: 8000, 
                 category: "Marketing", 
@@ -921,10 +921,10 @@ defineModule("PDFService", ["FormatHelper"], function(global, requireModule, req
         var y = section2Y + 35;
         
         var colCant = 22;   
-        var colDesc = 32;   
-        var colCat = 118;   
-        var colUnit = 172;  
-        var colTotal = 195; 
+        var colDesc = 32;
+        var colCat = 118;
+        var colUnit = 168;
+        var colTotal = 191;
 
         function drawTableHeader(startY) {
             doc.setFillColor(bgGray[0], bgGray[1], bgGray[2]);
