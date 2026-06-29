@@ -62,6 +62,11 @@ textarea {font-family: system-ui, sans-serif;}
     transition:background .2s ease;
 }
 
+.nav-item__icon {
+    width: 24px;
+    height: 24px;
+}
+
 .sidebar-nav a {
     display: block;
     padding: 0.75rem 1.5rem;
