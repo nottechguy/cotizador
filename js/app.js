@@ -309,8 +309,28 @@ defineModule("LayoutUI", ["$", "CSSCore"], function(global, requireModule, requi
         var sidebar = $.fromIDOrElement("sidebar");
         CSSCore.removeClass(sidebar, "open");
     }
+
+    /**
+     * Toggles the 'is-open' class on a nav-group to show/hide submenus
+     */
+    function toggleNavMenu(event, ctrlInstance) {
+        // We look for the closest .nav-group from the clicked element
+        var navGroup = requireModule("Parent").byClass(event.target, "nav-group");
+        var isOpenClassName = "is-open";
+
+        if (!navGroup) return;
+
+        if (requireModule("CSSCore").hasClass(navGroup, isOpenClassName)) {
+            requireModule("CSSCore").removeClass(navGroup, isOpenClassName);   
+        } else {
+            requireModule("CSSCore").addClass(navGroup, isOpenClassName);
+        }
+
+    }
+
     exports.toggleSidebar = toggleSidebar;
     exports.closeSidebar = closeSidebar;
+    exports.toggleNavMenu = toggleNavMenu;
 }, null);
 
 // ==========================================
