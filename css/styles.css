@@ -127,7 +127,7 @@ textarea {font-family: system-ui, sans-serif;}
 .btn-success { background: var(--success); color: white; }
 .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
 .btn-text { background: transparent; color: var(--primary); }
-.btn-icon { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+.btn-icon { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 24px; height: 24px; padding: 4px; -webkit-box-sizing: content-box; box-sizing: content-box; }
 
 /* === Modals === */
 dialog {
